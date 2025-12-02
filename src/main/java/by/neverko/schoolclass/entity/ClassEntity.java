@@ -2,6 +2,8 @@ package by.neverko.schoolclass.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,8 @@ public class ClassEntity {
     private Long id;
 
     @Column(nullable = false, updatable = true)
+    @NotBlank(message = "Имя класс не может быть пустым")
+    @Size(min = 1, max = 20, message = "Имя класса должно быть от 1 до 20 символов")
     private String name;
 
     @OneToMany(mappedBy = "classEntity", fetch = FetchType.LAZY)

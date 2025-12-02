@@ -1,6 +1,7 @@
 package by.neverko.schoolclass.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,9 +26,16 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
+    @Column(nullable = false)
+    @NotBlank(message = "Имя пользователя обязательно")
+    @Size(min = 2, max = 100, message = "Имя должно содержать от 2 до 100 символов")
+    private String name;
+
     @Column(unique = true)
+    @Email(message = "Некорректный email")
     private String email;
 
+    @Pattern(regexp = "^\\+?[0-9\\s\\-()]{7,20}$", message = "Некорректный номер телефона")
     private String phone;
 
     // Связь: родитель → ученик

@@ -1,6 +1,7 @@
 package by.neverko.schoolclass.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -28,9 +29,11 @@ public class Homework {
 
     @Lob
     @Column(nullable = false)
+    @NotBlank(message = "Описане домашнего задания обязательно")
     private String description;
 
     @Column(name = "due_date", nullable = false)
+    @NotNull(message = "Дата сдачи обязательна")
     private LocalDate dueDate;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

@@ -1,6 +1,7 @@
 package by.neverko.schoolclass.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import java.time.LocalDate;
 
@@ -25,9 +26,12 @@ public class Grade {
     private Subject subject;
 
     @Column(nullable = false, length = 10)
+    @NotBlank(message = "Значение оценки обязательно")
+    @Size(max = 10, message = "Оценка не может быть длиннее 10 символов")
     private String value;
 
     @Column(nullable = false)
+    @NotNull(message = "Дата оценки обязательна")
     private LocalDate date = LocalDate.now();
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

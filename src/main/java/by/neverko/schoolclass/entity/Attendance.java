@@ -2,6 +2,7 @@ package by.neverko.schoolclass.entity;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -25,8 +26,10 @@ public class Attendance {
     private User student;
 
     @Column(nullable = false)
+    @NotNull(message = "Дата песещаемости обязателен")
     private LocalDate date = LocalDate.now();
 
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Статус посещаемости обязателень")
     private Attendance status;
 }

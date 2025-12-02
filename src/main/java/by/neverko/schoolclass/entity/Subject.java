@@ -1,6 +1,8 @@
 package by.neverko.schoolclass.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -19,6 +21,8 @@ public class Subject {
     private Long id;
 
     @Column(nullable = false, updatable = true)
+    @NotBlank(message = "Название предмета обязательно")
+    @Size(min = 2, max = 100, message = "Название предмета должно быть от 2 до 100 символов")
     private String name;
 
     @ManyToMany(mappedBy = "subject")
