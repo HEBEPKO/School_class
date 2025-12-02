@@ -31,5 +31,6 @@ public class Attendance {
 
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Статус посещаемости обязателень")
-    private Attendance status;
+    private AttendanceStatus status;
+
 }
