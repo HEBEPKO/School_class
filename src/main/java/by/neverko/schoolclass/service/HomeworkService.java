@@ -25,6 +25,14 @@ public class HomeworkService {
         return homeworkRepository.findByClassEntityIdAndSubjectIdOrderByDueDateDesc(classId, subject);
     }
 
+    public Homework createHomework(Long currentUserId, Homework homework) {
+        Long classId = homework.getClassEntity().getId();
+        Long subjectId = homework.getSubject().getId();
+        securityUtils.validateCanEditHomework(currentUserId, classId, subjectId);
+        homework.setCreatedBy(securityUtils.getUserOrThrow(currentUserId));
+        return homeworkRepository.save(homework);
+    }
+
     @Transactional
     public Homework updateHomework(Long currentUserId, Long homeworkId, Homework updated) {
         Homework existing = homeworkRepository.findById(homeworkId)

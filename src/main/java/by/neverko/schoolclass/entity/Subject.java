@@ -25,8 +25,8 @@ public class Subject {
     @Size(min = 2, max = 100, message = "Название предмета должно быть от 2 до 100 символов")
     private String name;
 
-    @ManyToMany(mappedBy = "subject")
-    private List<User> teacher = new ArrayList<>();
+    @ManyToMany(mappedBy = "subjects")
+    private List<User> teachers = new ArrayList<>();
 
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Schedule> schedules = new ArrayList<>();

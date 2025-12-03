@@ -23,6 +23,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.classEntity.id = :classId AND u.role = by.neverko.schoolclass.entity.Role.CLASS_TEACHER")
     Optional<User> findClassTeacherByClassId(Long classId);
 
-    @Query("SELECT u FROM User u JOIN u.subject s WHERE s.id = :subjectId AND u.role = by.neverko.schoolclass.entity.Role.Teacher")
-    List<User> findTeachersBySubjectId(Long subjectId);
+    @Query("SELECT u FROM User u JOIN u.subjects s WHERE s.id = :subjectId AND u.role = :role")
+    List<User> findTeachersBySubjectId(Long subjectId, Role role);
 }

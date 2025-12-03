@@ -27,8 +27,13 @@ public class GradeService {
         return gradeRepository.findBySubjectIdOrderByDateDesc(subjectId);
     }
 
+    // Классный руководитель: все оценки класса
+    public List<Grade> getGradesForClass(Long classId) {
+        return gradeRepository.findByClassId(classId);
+    }
+
     @Transactional
-    public Grade addorUpdateGrade(Long currentUserId, Grade grade) {
+    public Grade addOrUpdateGrade(Long currentUserId, Grade grade) {
         Long subjectId = grade.getSubject().getId();
         Long classId = grade.getStudent().getClassEntity().getId();
         securityUtils.validateCanEditGrade(currentUserId, subjectId, classId);

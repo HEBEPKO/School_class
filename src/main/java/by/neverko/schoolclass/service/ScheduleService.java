@@ -17,7 +17,7 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final SecurityUtils securityUtils;
 
-    List<Schedule> getScheduleForClass(Long classId) {
+    public List<Schedule> getScheduleForClass(Long classId) {
         return scheduleRepository.findByClassEntityIdOrderByDayOfWeekAscLessonNumberAsc(classId);
     }
 

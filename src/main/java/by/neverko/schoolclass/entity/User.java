@@ -41,7 +41,7 @@ public class User {
     // Связь: родитель → ученик
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id", foreignKey = @ForeignKey(name = "fk_user_student"))
-    private User user;
+    private User student;
 
     // Класс (для STUDENT и CLASS_TEACHER)
     @ManyToOne(fetch = FetchType.LAZY)

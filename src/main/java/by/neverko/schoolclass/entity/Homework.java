@@ -27,8 +27,7 @@ public class Homework {
     @JoinColumn(name = "class_id", nullable = false, foreignKey = @ForeignKey(name = "fk_homework_class"))
     private ClassEntity classEntity;
 
-    @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     @NotBlank(message = "Описане домашнего задания обязательно")
     private String description;
 

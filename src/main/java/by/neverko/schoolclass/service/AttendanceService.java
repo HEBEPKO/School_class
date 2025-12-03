@@ -21,8 +21,8 @@ public class AttendanceService {
         return attendanceRepository.findByStudentIdOrderByDateDesc(studentId);
     }
 
-    public long getAbsenceCount(Long studentId, LocalDate from, LocalDate to) {
-        return attendanceRepository.countAbsences(studentId, from, to);
+    public long getAbsenceCount(Long studentId, LocalDate from, LocalDate to, AttendanceStatus status) {
+        return attendanceRepository.countAbsences(studentId, from, to, status);
     }
 
     @Transactional

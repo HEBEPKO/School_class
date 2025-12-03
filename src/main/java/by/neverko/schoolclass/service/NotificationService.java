@@ -1,5 +1,6 @@
 package by.neverko.schoolclass.service;
 
+import by.neverko.schoolclass.entity.AttendanceStatus;
 import by.neverko.schoolclass.entity.Grade;
 import by.neverko.schoolclass.entity.User;
 import by.neverko.schoolclass.repository.GradeRepository;
@@ -28,7 +29,7 @@ public class NotificationService {
 
         LocalDate now = LocalDate.now();
         LocalDate twoWeeksAgo = now.minusWeeks(2);
-        long absences = attendanceService.getAbsenceCount(studentId, twoWeeksAgo, now);
+        long absences = attendanceService.getAbsenceCount(studentId, twoWeeksAgo, now, AttendanceStatus.ABSENT);
 
         StringBuilder report = new StringBuilder();
         report.append("📊 Отчёт об успеваемости и посещаемости\n");

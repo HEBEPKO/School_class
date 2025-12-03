@@ -20,7 +20,7 @@ public interface GradeRepository extends JpaRepository<Grade, Long> {
     List<Grade> findBySubjectIdOrderByDateDesc(Long subjectId);
 
     // Оценки в классе по предмету
-    @Query("SELECT g FROM Grade g WHERE g.student.classEntity.id = :classId AND g.subject.id ORDER BY g.date DESC")
+    @Query("SELECT g FROM Grade g WHERE g.student.classEntity.id = :classId AND g.subject.id = :subjectId ORDER BY g.date DESC")
     List<Grade> findByClassAndSubject(Long classId, Long subjectId);
 
     // Оценки класса по всем предметам (для классного руководителя)

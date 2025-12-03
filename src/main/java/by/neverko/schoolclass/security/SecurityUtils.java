@@ -41,7 +41,7 @@ public class SecurityUtils {
             }
             // CLASS_TEACHER может редактировать любое ДЗ своего класса
             if (!user.getClassEntity().getId().equals(classId)) {
-                throw new SecurityException("Нет доступа к ДЗ Этого Класса")ж
+                throw new SecurityException("Нет доступа к ДЗ Этого Класса");
             }
         } else {
             throw new SecurityException("Только ученик, учитель или классный руководитель могут редактировать ДЗ");
