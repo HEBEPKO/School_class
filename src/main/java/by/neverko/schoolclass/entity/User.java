@@ -1,5 +1,6 @@
 package by.neverko.schoolclass.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -71,4 +72,11 @@ public class User {
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Grade> givenGrades = new ArrayList<>();
 
+    @NotBlank(message = "Пороль обязателен", groups = OnCreate.class)
+    @Size(min = 6, message = "Пароль должен быть не короче 6 символов")
+    @JsonIgnore
+    private String password;
+
+    // Для валидации при создании
+    public interface OnCreate {}
 }

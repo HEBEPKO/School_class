@@ -4,6 +4,7 @@ import by.neverko.schoolclass.entity.Schedule;
 import by.neverko.schoolclass.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,8 +27,9 @@ public class ScheduleController {
     @PostMapping
     public ResponseEntity<Schedule> createSchedule(
             @RequestParam Schedule schedule,
-            @RequestHeader("X-User-Id") Long currentUserId
+            @AuthenticationPrincipal org.springframework.security.core.userdetails.User principal
     ) {
+        Long currentUserId = Long.parseLong(principal.getUsername());
         Schedule saved = scheduleService.createOrUpdateSchedule(currentUserId, schedule);
         return ResponseEntity.ok(saved);
     }
