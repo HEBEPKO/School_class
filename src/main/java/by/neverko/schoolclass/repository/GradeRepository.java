@@ -30,4 +30,5 @@ public interface GradeRepository extends JpaRepository<Grade, Long> {
     // Оценки за период
     List<Grade> findByStudentIdAndDateBetween(Long studentId, LocalDate start, LocalDate end);
 
+    boolean existsByStudentIdAndTeacherId(Long studentId, Long currentUserId);
 }

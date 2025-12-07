@@ -77,6 +77,9 @@ public class User {
     @JsonIgnore
     private String password;
 
+    @Column(name = "telegram_chat_id")
+    private String telegramChatId;
+
     // Для валидации при создании
     public interface OnCreate {}
 }

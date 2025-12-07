@@ -2,14 +2,27 @@ package by.neverko.schoolclass.security;
 
 import by.neverko.schoolclass.entity.Role;
 import by.neverko.schoolclass.entity.User;
+import by.neverko.schoolclass.event.PerformanceReportEvent;
+import by.neverko.schoolclass.repository.GradeRepository;
 import by.neverko.schoolclass.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
+import org.springframework.security.access.AccessDeniedException;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 public class SecurityUtils {
     private final UserRepository userRepository;
+//    private final NotificationService notificationService;
+    private final ApplicationEventPublisher eventPublisher;
+    private final GradeRepository gradeRepository;
+
 
     public User getUserOrThrow(Long userId) {
         return userRepository.findById(userId)
@@ -70,5 +83,72 @@ public class SecurityUtils {
         }
 
         throw new SecurityException("Только учитель или классный руководитель могут редактировать оценки");
+    }
+
+    public Long getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return null;
+        }
+
+         Object principal = authentication.getPrincipal();
+        if (principal instanceof UserDetails) {
+            String username = ((UserDetails) principal).getUsername();
+            try {
+                return Long.parseLong(username);
+            } catch (NumberFormatException e) {
+                // Лучше не полагаться на это
+                return null;
+            }
+        }
+        return null;
+    }
+
+    public boolean validateCanSendPerformanceReport(Long currentUserId, Long studentId) {
+        Optional<User> currentUserOpt = userRepository.findById(currentUserId);
+
+        if (currentUserOpt.isEmpty()) {
+            return false;
+        }
+
+        User currentUser = currentUserOpt.get();
+
+        if (currentUser.getRole() != Role.TEACHER && currentUser.getRole() != Role.CLASS_TEACHER) {
+            return false;
+        }
+
+        Optional<User> studentOpt = userRepository.findById(studentId);
+        if (studentOpt.isEmpty()) {
+            return false;
+        }
+
+        User student = studentOpt.get();
+
+        if (currentUser.getRole() == Role.CLASS_TEACHER &&
+            currentUser.getClassEntity() != null &&
+            student.getClassEntity() != null &&
+            currentUser.getClassEntity().equals(student.getClassEntity())) {
+            return true;
+        }
+
+        return gradeRepository.existsByStudentIdAndTeacherId(studentId, currentUserId);
+    }
+
+    public boolean canSendPerformanceReport(Long currentUserId, Long studentId) {
+        Optional<User> currentUserOpt = userRepository.findById(currentUserId);
+        if (currentUserOpt.isEmpty()) {
+            return false;
+        }
+
+        User currentUser = currentUserOpt.get();
+
+        // Проверяем, является ли пользователь учителем или классным руководителем
+        if (!Role.TEACHER.equals(currentUser.getRole()) && !Role.CLASS_TEACHER.equals(currentUser.getRole())) {
+            return false;
+        }
+
+        // Проверяем, относится ли ученик к классу текущего пользователя
+        // или текущий пользователь преподает предметы ученику
+        return true;
     }
 }
