@@ -8,11 +8,9 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring", uses = {})
 public interface UserMapper {
-
+    @Mapping(source = "student.id", target = "studentId")
+    @Mapping(source = "classEntity.id", target = "classId")
     UserDto toDto(User user);
-
-    User toEntity(UserDto userDto);
-
 
     UserDto toDTOWithClassId(User user);
 }

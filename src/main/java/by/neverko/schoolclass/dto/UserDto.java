@@ -10,5 +10,5 @@ public record UserDto(
         String email,
         String phone,
         Long studentId,
-        ClassEntity classEntityId
+        Long classId
 ) {}
