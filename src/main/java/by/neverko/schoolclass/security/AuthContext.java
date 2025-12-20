@@ -1,19 +1,16 @@
 package by.neverko.schoolclass.security;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
+@Setter
+@Getter
 @Component
 @RequestScope
 public class AuthContext {
 
     private Long currentUserId;
 
-    public void setCurrentUserId(Long userId) {
-        this.currentUserId = userId;
-    }
-
-    public Long getCurrentUserId() {
-        return currentUserId;
-    }
 }
