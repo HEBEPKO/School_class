@@ -9,6 +9,7 @@ import by.neverko.schoolclass.mapper.UserMapper;
 import by.neverko.schoolclass.repository.ClassRepository;
 import by.neverko.schoolclass.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,12 +23,14 @@ public class UserService {
     private final ClassRepository classRepository;
     private final UserMapper userMapper;
 
+    @Transactional(readOnly = true)
     public UserDto getUserById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
         return userMapper.toDto(user);
     }
 
+    @Transactional(readOnly = true)
     public List<UserDto> getAllUser() {
         return userRepository.findAll().stream()
                 .map(userMapper::toDto)
@@ -45,7 +48,8 @@ public class UserService {
                 .toList();
     }
 
-    public UserDto createUser(UserDto userDto) {
+    @Transactional
+    public UserDto createUser(@NotNull UserDto userDto) {
         User user = new User();
         user.setRole(userDto.role());
         user.setName(userDto.name());
@@ -61,7 +65,8 @@ public class UserService {
         return userMapper.toDto(userRepository.save(user));
     }
 
-    public UserDto updateUser(Long id, UserDto userDto) {
+    @Transactional
+    public UserDto updateUser(Long id, @NotNull UserDto userDto) {
         User existtingUser = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Пользователь не найден с ID: " + id));
 
