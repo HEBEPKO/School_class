@@ -3,14 +3,11 @@ package by.neverko.schoolclass.controller;
 import by.neverko.schoolclass.dto.CreateUserRequest;
 import by.neverko.schoolclass.dto.UserDto;
 import by.neverko.schoolclass.dto.UserResponse;
-import by.neverko.schoolclass.entity.Grade;
 import by.neverko.schoolclass.entity.Role;
-import by.neverko.schoolclass.entity.User;
 import by.neverko.schoolclass.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

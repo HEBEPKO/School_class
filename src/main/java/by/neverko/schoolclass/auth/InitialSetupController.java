@@ -2,7 +2,6 @@ package by.neverko.schoolclass.auth;
 
 
 import by.neverko.schoolclass.dto.CreateUserRequest;
-import by.neverko.schoolclass.dto.UserDto;
 import by.neverko.schoolclass.dto.UserResponse;
 import by.neverko.schoolclass.entity.Role;
 import by.neverko.schoolclass.repository.UserRepository;

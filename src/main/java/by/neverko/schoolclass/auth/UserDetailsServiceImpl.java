@@ -1,6 +1,5 @@
 package by.neverko.schoolclass.auth;
 
-import by.neverko.schoolclass.entity.Role;
 import by.neverko.schoolclass.entity.User;
 import by.neverko.schoolclass.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,8 +7,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
