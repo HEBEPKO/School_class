@@ -4,7 +4,10 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +20,16 @@ import java.util.function.Function;
 @Service
 public class JwtTokenProvider {
 
-    @Value(value = "JWT_SECRET")
-    private String jwtSecret;
+    private final String jwtSecret;
+    private final long jwtExpiration;
 
-    @Value(value = "${app.jwt.expiration}")
-    private long jwtExpiration;
+    public JwtTokenProvider(
+            @Value("${app.jwt.secret}") String jwtSecret,
+            @Value("${app.jwt.expiration}") long jwtExpiration
+    ) {
+        this.jwtSecret = jwtSecret;
+        this.jwtExpiration = jwtExpiration;
+    }
 
     private SecretKey getSignInKey() {
         byte[] keyByte = Decoders.BASE64.decode(jwtSecret);
@@ -31,7 +39,7 @@ public class JwtTokenProvider {
 
     public String generateToken(UserDetails userDetails) {
         var roles = userDetails.getAuthorities().stream()
-                .map(grantedAuthority -> grantedAuthority.getAuthority().replace("ROLE_", ""))
+                .map(GrantedAuthority :: getAuthority)
                 .toList();
 
         Map<String, Object> claims = new HashMap<>();

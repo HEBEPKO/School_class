@@ -25,4 +25,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u JOIN u.subjects s WHERE s.id = :subjectId AND u.role = :role")
     List<User> findTeachersBySubjectId(Long subjectId, Role role);
+
+    boolean existsByRole(Role role);
 }

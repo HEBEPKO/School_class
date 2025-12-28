@@ -6,6 +6,8 @@ import by.neverko.schoolclass.mapper.ClassMapper;
 import by.neverko.schoolclass.repository.ClassRepository;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 public class ClassEntityService {
+    private static final Logger log = LoggerFactory.getLogger(ClassEntityService.class);
     private final ClassRepository classRepository;
     private final ClassMapper classMapper;
 
@@ -33,14 +36,14 @@ public class ClassEntityService {
         return classMapper.toDto(classes);
     }
 
-    public ClassEntityDto createdClass(@NotNull ClassEntityDto classEntityDto) {
+    public ClassEntityDto createdClass(ClassEntityDto classEntityDto) {
         ClassEntity classEntity = new ClassEntity();
         classEntity.setName(classEntityDto.name());
         classEntity.setTimeCreated(classEntityDto.timeCreated());
         return classMapper.toDto(classRepository.save(classEntity));
     }
 
-    public ClassEntityDto update(Long id, @NotNull ClassEntityDto classEntityDto) {
+    public ClassEntityDto update(Long id, ClassEntityDto classEntityDto) {
         ClassEntity existsClass = classRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Класс с ID :" + id + " не найден"));
 

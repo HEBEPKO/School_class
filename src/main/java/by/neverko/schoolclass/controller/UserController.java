@@ -1,6 +1,8 @@
 package by.neverko.schoolclass.controller;
 
+import by.neverko.schoolclass.dto.CreateUserRequest;
 import by.neverko.schoolclass.dto.UserDto;
+import by.neverko.schoolclass.dto.UserResponse;
 import by.neverko.schoolclass.entity.Grade;
 import by.neverko.schoolclass.entity.Role;
 import by.neverko.schoolclass.entity.User;
@@ -35,9 +37,9 @@ public class UserController {
     }
 
     @PostMapping("/user/save")
-    public ResponseEntity<UserDto> addUser(@RequestBody UserDto userDto) {
-        UserDto savedUser = userService.createUser(userDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+    public ResponseEntity<UserResponse> addUser(@RequestBody CreateUserRequest request) {
+       UserResponse response = userService.createUser(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("/{id}")
