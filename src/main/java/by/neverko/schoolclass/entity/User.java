@@ -73,4 +73,5 @@ public class User extends Auditable {
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Grade> givenGrades = new ArrayList<>();
 
+    private String password;
 }
