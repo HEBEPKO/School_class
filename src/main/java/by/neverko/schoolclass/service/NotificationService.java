@@ -1,5 +1,6 @@
 package by.neverko.schoolclass.service;
 
+import by.neverko.schoolclass.dto.GradeDto;
 import by.neverko.schoolclass.entity.AttendanceStatus;
 import by.neverko.schoolclass.entity.Grade;
 import by.neverko.schoolclass.entity.User;
@@ -23,7 +24,7 @@ public class NotificationService {
         User student = new User(); // в реальности загрузка через UserRepository
         // Но для отчета достаточно ID
 
-        List<Grade> recentGrades = gradeService.getGradesForStudent(studentId).stream()
+        List<GradeDto> recentGrades = gradeService.getGradesForStudent(studentId).stream()
                 .limit(10)
                 .toList();
 
@@ -41,8 +42,8 @@ public class NotificationService {
             report.append("Нет новых оценок.\n");
         } else {
             report.append("Последние оценки:\n");
-            for (Grade g : recentGrades) {
-                report.append(" * ").append(g.getSubject().getName())
+            for (GradeDto g : recentGrades) {
+                report.append(" * ").append(g.getStudentName())
                         .append(": ").append(g.getValue())
                         .append(" (").append(g.getDate().format(DateTimeFormatter.ISO_LOCAL_DATE)).append(")\n");
             }

@@ -30,7 +30,7 @@ public class Attendance {
     private LocalDate date = LocalDate.now();
 
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "Статус посещаемости обязателень")
+    @NotNull(message = "Статус посещаемости обязателен")
     private AttendanceStatus status;
 
 }

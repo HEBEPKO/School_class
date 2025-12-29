@@ -1,0 +1,370 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0001-create-enums
+      author: neverko
+      changes:
+        - sql:
+            sql: |
+              CREATE TYPE role_enum AS ENUM ('CLASS_TEACHER', 'TEACHER', 'STUDENT', 'PARENT', 'ADMIN');
+              CREATE TYPE attendance_status_enum AS ENUM('PRESENT', 'ABSENT', 'LATE', 'EXCUSED');
+  - changeSet:
+      id: 0002-create-tables
+      author: neverko
+      changes:
+        - createTable:
+            tableName: class
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
+        - createTable:
+            tableName: "user"
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: role
+                  type: role_enum
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: true
+              - column:
+                  name: phone
+                  type: VARCHAR(30)
+              - column:
+                  name: student_id
+                  type: BIGINT
+              - column:
+                  name: class_id
+                  type: BIGINT
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
+        - createTable:
+            tableName: subject
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
+        - createTable:
+            tableName: teacher_subject
+            columns:
+              - column:
+                  name: teacher_id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: subject_id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
+        - createTable:
+            tableName: schedule
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: class_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: subject_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: day_of_week
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: lesson_number
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+            uniqueConstraints:
+              - uniqueColumns: class_id, day_of_week, lesson_number
+
+        - createTable:
+            tableName: homework
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: subject_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: class_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: due_date
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
+        - createTable:
+            tableName: grade
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: student_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: subject_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: value
+                  type: VARCHAR(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: teacher_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
+        - createTable:
+            tableName: attendance
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: student_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: attendance_status_enum
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+            uniqueConstraints:
+              - uniqueColumns: student_id, date
+
+  - changeSet:
+      id: 0003-add-foreign-keys
+      author: neverko
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: "user"
+            baseColumnNames: student_id
+            constraintName: fk_user_student
+            referencedTableName: "user"
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: "user"
+            baseColumnNames: class_id
+            constraintName: fk_user_class
+            referencedTableName: class
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: teacher_subject
+            baseColumnNames: teacher_id
+            constraintName: fk_teacher_subject_teacher
+            referencedTableName: "user"
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: teacher_subject
+            baseColumnNames: subject_id
+            constraintName: fk_teacher_subject_subject
+            referencedTableName: subject
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: schedule
+            baseColumnNames: class_id
+            constraintName: fk_schedule_class
+            referencedTableName: class
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: schedule
+            baseColumnNames: subject_id
+            constraintName: fk_schedule_subject
+            referencedTableName: subject
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: homework
+            baseColumnNames: subject_id
+            constraintName: fk_homework_subject
+            referencedTableName: subject
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: homework
+            baseColumnNames: class_id
+            constraintName: fk_homework_class
+            referencedTableName: class
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: homework
+            baseColumnNames: created_by
+            constraintName: fk_homework_creator
+            referencedTableName: "user"
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: grade
+            baseColumnNames: student_id
+            constraintName: fk_grade_student
+            referencedTableName: "user"
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: grade
+            baseColumnNames: subject_id
+            constraintName: fk_grade_subject
+            referencedTableName: subject
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: grade
+            baseColumnNames: teacher_id
+            constraintName: fk_grade_teacher
+            referencedTableName: "user"
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: attendance
+            baseColumnNames: student_id
+            constraintName: fk_attendance_student
+            referencedTableName: "user"
+            referencedColumnNames: id
