@@ -25,22 +25,13 @@ public class GradeController {
     public ResponseEntity<List<GradeDto>> getMeGrades(
             @RequestHeader("X-User-Id") Long currentUserId
             // Предполагаем, что currentUserId — это ID ученика или родителя
-            // Если родитель — нужно найти studentId. Упростим: пусть фронтенд передаёт studentId напрямую
+            // Если родитель — нужно найти studentId. Упростим: пусть Frontend передаёт studentId напрямую
             // В реальности: if (parent) studentId = parent.getStudent().getId()
     ) {
         return ResponseEntity.ok(gradeService.getGradesForStudent(currentUserId));
     }
 
-    // Ученик / Родитель: оценки конкретного ученика (родитель знает ID ребёнка)
-//    @GetMapping("/student/{studentId}")
-//    public ResponseEntity<List<GradeDto>> getGradesForStudent(
-//            @PathVariable Long studentId
-//    ) {
-//        List<GradeDto> grades = gradeService.getGradesForStudent(studentId);
-//        return ResponseEntity.ok(gradeService.getGradesForStudent(studentId));
-//    }
-
-    // Учитель: оценки по своему предмету
+       // Учитель: оценки по своему предмету
     @GetMapping("/student/{studentId}")
     @PreAuthorize("hasRole('TEACHER') " +
             "or hasRole('ADMIN') " +
@@ -59,16 +50,6 @@ public class GradeController {
     ) {
         return ResponseEntity.ok(gradeService.getGradesForClass(classId));
     }
-
-//    // Добавление/редактирование оценки
-//    @PostMapping
-//    public ResponseEntity<GradeDto> addGrade(
-//            @Valid @RequestBody GradeDto dto,
-//            @RequestHeader Long currentUserId
-//    ) {
-//        GradeDto saved = gradeService.createGrade(dto);
-//        return ResponseEntity.ok(saved);
-//    }
 
     @PutMapping("/{id}")
     public ResponseEntity<Grade> updateGrade(
