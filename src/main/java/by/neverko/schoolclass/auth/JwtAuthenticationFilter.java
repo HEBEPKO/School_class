@@ -11,6 +11,8 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -59,9 +61,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     List<String> roles = jwtTokenProvider.extractClaim(jwt, claims -> claims.get("roles", List.class));
                     if (roles == null) roles = List.of();
 
+                    UserDetails userDetails = User.withUsername(userEmail)
+                            .password("")
+                            .authorities(authHeader)
+                            .build();
+
                     UsernamePasswordAuthenticationToken authToken =
                             new UsernamePasswordAuthenticationToken(
-                                    userEmail,
+                                    userDetails,
                                     null,
                                     roles.stream()
                                             .map(SimpleGrantedAuthority::new)

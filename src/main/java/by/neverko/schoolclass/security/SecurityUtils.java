@@ -4,12 +4,28 @@ import by.neverko.schoolclass.entity.Role;
 import by.neverko.schoolclass.entity.User;
 import by.neverko.schoolclass.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class SecurityUtils {
     private final UserRepository userRepository;
+
+    public static User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new  SecurityException("Пользователь не аутентифицирован");
+        }
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof UserDetails userDetails) {
+
+        }
+        throw new UnsupportedOperationException("Требуется кастомная реализация");
+    }
 
     public User getUserOrThrow(Long userId) {
         return userRepository.findById(userId)

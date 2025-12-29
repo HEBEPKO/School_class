@@ -10,11 +10,43 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface GradeMapper {
-    List<GradeDto> toDTOs(List<Grade> grades);
 
+    @Mapping(source = "student.id", target = "studentId")
+    @Mapping(source = "subject.id", target = "subjectId")
+    @Mapping(source = "teacher.id", target = "teacherId")
+    GradeDto toDtoBase(Grade grade);
 
-    GradeDto toDto(Grade grade);
+    default GradeDto toDto(Grade grade) {
+        GradeDto dto = toDtoBase(grade);
+        if (grade.getStudent() != null) {
+            dto.setStudentName(grade.getStudent().getName());
+        }
+        if (grade.getSubject() != null) {
+            dto.setSubjectName(grade.getSubject().getName());
+        }
+        if (grade.getTeacher() != null) {
+            dto.setTeacherName(grade.getTeacher().getName());
+        }
+        return dto;
+    }
 
-    @InheritConfiguration
+    @Mapping(target = "student", ignore = true)
+    @Mapping(target = "subject", ignore = true)
+    @Mapping(target = "teacher", ignore = true)
+    @Mapping(target = "id", ignore = true)
     Grade toEntity(GradeDto gradeDto);
+
+    default GradeDto toDtoWithNames(Grade grade) {
+        GradeDto dto = toDto(grade);
+        if (grade.getStudent() != null) {
+            dto.setStudentName(grade.getStudent().getName());
+        }
+        if (grade.getSubject() != null) {
+            dto.setSubjectName(grade.getSubject().getName());
+        }
+        if (grade.getTeacher() != null) {
+            dto.setTeacherName(grade.getTeacher().getName());
+        }
+        return dto;
+    }
 }
